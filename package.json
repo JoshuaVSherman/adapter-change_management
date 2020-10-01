@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JoshuaVSherman/adapter-change_management#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "request": "^2.88.2"
   }
 }
