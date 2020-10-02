@@ -56,11 +56,11 @@ class ServiceNowConnector {
    *   Will be HTML text if hibernating instance.
    * @param {error} callback.error - The error property of callback.
    */
-  get(callback) {
-    let getCallOptions = { ...this.options };
-    getCallOptions.method = 'GET';
-    getCallOptions.query = 'sysparm_limit=1';
-    this.sendRequest(getCallOptions, (results, error) => callback(results, error));
+  get(cb, handleResults) {
+    // let getCallOptions = { ...this.options };
+    // getCallOptions.method = 'GET';
+    // getCallOptions.query = 'sysparm_limit=10';
+    this.sendRequest({method:'GET', query:'sysparm_limit=10'}, (results, error) => handleResults(results, error, cb));
   }
   /**
  * @function constructUri
@@ -158,11 +158,11 @@ class ServiceNowConnector {
     callOptions.method = 'POST';
     this.sendRequest(callOptions, (results, error) => callback(results, error));
   }
-  get(callOptions, callback) {
-  callOptions.method = 'GET';
-  callOptions.query = 'sysparm_limit=1';
-  this.sendRequest(callOptions, (results, error) => callback(results, error));
-}
+//   get(callOptions, callback) {
+//   callOptions.method = 'GET';
+//   callOptions.query = 'sysparm_limit=1';
+//   this.sendRequest(callOptions, (results, error) => callback(results, error));
+// }
 }
 
 module.exports = ServiceNowConnector;
