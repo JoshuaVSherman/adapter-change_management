@@ -139,7 +139,7 @@ healthcheck(callback) {
       * responseData parameter.
       */
       this.emit('ONLINE', { id: this.id });
-        log.info(`${origin}: HEALTH CHECK SUCCESSFUL`);
+      log.info(`${origin}: HEALTH CHECK SUCCESSFUL`);
       if(callback)callback(result)
    }
  });
@@ -191,10 +191,10 @@ healthcheck(callback) {
    * @param {ServiceNowAdapter~requestCallback} callback - The callback that
    *   handles the response.
    */
-  cb(data, error, type){
-    if (error) { console.error(`\nError returned from ${type} request:\n${JSON.stringify(error)}`); }
-    console.log(`\nResponse returned from ${type} request:\n${JSON.stringify(data)}`)
-  }
+  // cb(data, error, type){
+  //   if (error) { console.error(`\nError returned from ${type} request:\n${JSON.stringify(error)}`); }
+  //   console.log(`\nResponse returned from ${type} request:\n${JSON.stringify(data)}`)
+  // }
   getRecord(callback) {
     /**
      * Write the body for this function.
@@ -202,8 +202,8 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * get() takes a callback function.
      */
-     const cbg = (data, error)=> cb(data, error, 'GET');
-     this.connector.get({}, cbg)
+     //const cbg = (data, error)=> cb(data, error, 'GET');
+     this.connector.get({}, callback);
   }
 
   /**
@@ -222,8 +222,8 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-     const cbp = (data, error)=> cb(data, error, 'POST');
-     this.connector.get({}, cbp)
+     // const cbp = (data, error)=> cb(data, error, 'POST');
+     this.connector.get({}, callback);
   }
 }
 
