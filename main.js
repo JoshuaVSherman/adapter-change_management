@@ -125,7 +125,7 @@ healthcheck(callback) {
       * for the callback's errorMessage parameter.
       */
       this.emit('OFFLINE', { id: this.id });
-      log.error(`${this.id} ${origin}: HEALTH CHECK - Error ${error}`);
+      log.error(`${this.id} ServiceNow: HEALTH CHECK - Error ${error}`);
       if(callback)callback(null, error)
    } else {
      /**
@@ -139,7 +139,7 @@ healthcheck(callback) {
       * responseData parameter.
       */
       this.emit('ONLINE', { id: this.id });
-      log.info(`${origin}: HEALTH CHECK SUCCESSFUL`);
+      log.info(`${this.id} ServiceNow: HEALTH CHECK SUCCESSFUL`);
       if(callback)callback(result)
    }
  });
