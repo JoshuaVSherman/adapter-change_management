@@ -113,23 +113,23 @@ handleResults(result, error, callback){
       * healthcheck(), execute it passing the error seen as an argument
       * for the callback's errorMessage parameter.
       */
-      this.emit('OFFLINE', { id: this.id });
+      this.emit('OFFLINE', { id:this.id });
       log.error(`${this.id} ServiceNow: Instance is unavailable. ${error}`);
       if(callback)callback(null, error); 
    } else {
-       let data;
-       try{
-       data = JSON.parse(result.body);
-       data = data.result.map(r=>{
-           const newData = {change_ticket_number:r.number, active:r.active, priority:r.priority, 
-           description:r.description, work_start:r.work_start, work_end:r.work_end, change_ticket_key:r.sys_id
-           }
-           return newData;
-       })
-       }catch(e){
-        log.error(`${this.id} ServiceNow: ${e}`);
-        if(callback)callback(null, error); 
-       }
+      //  let data;
+      //  try{
+      //  data = JSON.parse(result.body);
+      //  data = data.result.map(r=>{
+      //      const newData = {change_ticket_number:r.number, active:r.active, priority:r.priority, 
+      //      description:r.description, work_start:r.work_start, work_end:r.work_end, change_ticket_key:r.sys_id
+      //      }
+      //      return newData;
+      //  })
+      //  }catch(e){
+      //   log.error(`${this.id} ServiceNow: ${e}`);
+      //   if(callback)callback(null, error); 
+      //  }
      /**
       * Write this block.
       * If no runtime problems were detected, emit ONLINE.
@@ -140,9 +140,9 @@ handleResults(result, error, callback){
       * parameter as an argument for the callback function's
       * responseData parameter.
       */
-      this.emit('ONLINE', { id: this.id });
+      this.emit('ONLINE', { id:this.id });
       log.debug(`${this.id} ServiceNow: Instance is available.`);
-      if(callback)callback(data, null); 
+      if(callback)callback(result, null); 
    }
  }; 
 healthcheck(callback) {
@@ -207,7 +207,7 @@ healthcheck(callback) {
      * get() takes a callback function.
      */
     //  const cbg = (data, error)=> cb(data, error, 'GET');
-     this.connector.get(callback, this.handleResults);
+     this.connector.get((data, error) => this.handleResults(data, error, callback));
   }
 
   /**
@@ -226,8 +226,7 @@ healthcheck(callback) {
      * Note how the object was instantiated in the constructor().
      * post() takes a callback function.
      */
-     const cbp = (data, error)=> cb(data, error, 'POST');
-     this.connector.get({}, cbp)
+     this.connector.post((data, error) => this.handleResults(data, error, callback))
   }
 }
 

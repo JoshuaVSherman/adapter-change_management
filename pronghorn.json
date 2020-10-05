@@ -1,5 +1,5 @@
 {
-  "id": "@acme/adapter-change_management",
+  "id": "@itentialopensource/adapter-change_management",
   "type": "Adapter",
   "src": "main.js",
   "export": "ServiceNowAdapter",

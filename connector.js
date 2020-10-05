@@ -56,11 +56,8 @@ class ServiceNowConnector {
    *   Will be HTML text if hibernating instance.
    * @param {error} callback.error - The error property of callback.
    */
-  get(cb, handleResults) {
-    // let getCallOptions = { ...this.options };
-    // getCallOptions.method = 'GET';
-    // getCallOptions.query = 'sysparm_limit=10';
-    this.sendRequest({method:'GET', query:'sysparm_limit=10'}, (results, error) => handleResults(results, error, cb));
+  get(cb) {
+    this.sendRequest({method:'GET', query:'sysparm_limit=10'}, (results, error) => cb(results, error));
   }
   /**
  * @function constructUri
@@ -112,7 +109,26 @@ class ServiceNowConnector {
       callbackError = 'Service Now instance is hibernating';
       console.error(callbackError);
     } else {
-      callbackData = response;
+      let data;
+      if(response.statusCode === 200){
+       try{
+       data = JSON.parse(response.body);
+       data = data.result.map(r=>{
+           const newData = {change_ticket_number:r.number, active:r.active, priority:r.priority, 
+           description:r.description, work_start:r.work_start, work_end:r.work_end, change_ticket_key:r.sys_id
+           }
+           return newData;
+       });
+       callbackData = data;
+       }catch(e){callbackError=e; }
+      } else if (response.statusCode === 201){
+          try{
+          const r = JSON.parse(response.body).result;
+          callbackData = {change_ticket_number:r.number, active:r.active, priority:r.priority, 
+           description:r.description, work_start:r.work_start, work_end:r.work_end, change_ticket_key:r.sys_id
+           }
+        }catch(e){callbackError=e; }
+      }
     }
     return callback(callbackData, callbackError);
   }
@@ -154,15 +170,10 @@ class ServiceNowConnector {
  *   Will be HTML text if hibernating instance.
  * @param {error} callback.error - The error property of callback.
  */
-  post(callOptions, callback) {
-    callOptions.method = 'POST';
-    this.sendRequest(callOptions, (results, error) => callback(results, error));
+  post(cb) {
+    const body = {description:'new ticket'};
+    this.sendRequest({method:'POST', body}, (results, error) => cb(results, error));
   }
-//   get(callOptions, callback) {
-//   callOptions.method = 'GET';
-//   callOptions.query = 'sysparm_limit=1';
-//   this.sendRequest(callOptions, (results, error) => callback(results, error));
-// }
 }
 
 module.exports = ServiceNowConnector;
